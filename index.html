@@ -307,6 +307,41 @@
             font-size: 10px;
         }
 
+        .badge-risk {
+            background-color: #fde7e9;
+            color: #c4314b;
+            border: 1px solid #f1c0c7;
+            font-weight: 600;
+            font-size: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-persona {
+            background-color: #f3f0ff;
+            color: #5b2d8e;
+            font-size: 10px;
+        }
+
+        .risk-disclaimer {
+            background-color: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #5d4037;
+        }
+
+        .risk-disclaimer strong {
+            color: #e65100;
+        }
+
+        .risk-disclaimer .disclaimer-icon {
+            font-size: 16px;
+            margin-right: 6px;
+        }
+
         .prompt-description {
             font-size: 13px;
             color: #555;
@@ -882,6 +917,7 @@
         <button class="tab-btn" data-tab="assembler">Prompt Assembler</button>
         <button class="tab-btn" data-tab="studio">Copilot Studio</button>
         <button class="tab-btn" data-tab="sharepoint">SharePoint Deployment</button>
+        <button class="tab-btn" data-tab="create">Design & Create</button>
         <button class="tab-btn" data-tab="community">Suggest a Prompt</button>
     </div>
 
@@ -951,6 +987,16 @@
                         <input type="checkbox" value="Procurement" checked>
                         <label>Procurement</label>
                     </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <h3>Persona</h3>
+                    <button class="toggle-all" data-target="personaFilters">Deselect All</button>
+                </div>
+                <div class="checkbox-group" id="personaFilters">
+                    <!-- Populated dynamically from CSV data -->
                 </div>
             </div>
 
@@ -1047,6 +1093,10 @@
         <div class="main-content visible" id="mainContent">
             <!-- Tab 1: Prompt Library -->
             <div class="tab-content visible" id="library-tab">
+                <div class="risk-disclaimer">
+                    <span class="disclaimer-icon">&#9888;</span>
+                    <strong>Responsible AI Use:</strong> Copilot is a productivity assistant, not a decision-maker. Always verify AI-generated outputs against your own expertise and organizational policies before acting on them. Do not use Copilot to perform tasks you cannot independently evaluate or validate. Prompts flagged as <span class="badge badge-risk" style="display:inline;padding:2px 6px;font-size:11px;">Potentially High Risk</span> involve areas where errors could have regulatory, financial, or compliance implications — exercise additional scrutiny and follow your institution's review and approval processes.
+                </div>
                 <div class="prompt-grid" id="promptGrid"></div>
                 <div class="no-results" id="noResults" style="display: none;">
                     <p>No prompts match your filters.</p>
@@ -1634,7 +1684,49 @@ Example:
                 </div>
             </div>
 
-            <!-- Tab 6: Community Submissions -->
+            <!-- Tab 6: Design & Create -->
+            <div class="tab-content" id="create-tab">
+                <div class="guide-section">
+                    <h2>Design & Create with Copilot</h2>
+                    <p>Microsoft 365 Copilot includes powerful creative capabilities that let you generate visual content, design documents, and create multimedia — all without building custom agents. These features are available through the <strong>Create hub</strong> (create.microsoft.com), the <strong>M365 Copilot app</strong>, and integrated into <strong>Word, PowerPoint, Outlook, and Designer</strong>.</p>
+
+                    <h3>What You Can Create</h3>
+                    <ul class="guide-list">
+                        <li><strong>AI-Generated Images:</strong> Generate original professional images from text descriptions. Copilot produces 4 variations per prompt. Edit with crop, background removal, filters, and style adjustments. Best for presentations, newsletters, and internal communications.</li>
+                        <li><strong>Posters & Banners:</strong> Design event posters, digital banners for SharePoint or email, and promotional graphics. Use brand-compliant templates or describe what you need conversationally.</li>
+                        <li><strong>Infographics:</strong> Visualize data, processes, or concepts as professional infographics. Ideal for executive summaries, team updates, and training materials.</li>
+                        <li><strong>Social Media Content:</strong> Create platform-optimized posts (LinkedIn, Twitter, Instagram) with matching visuals and copy — all respecting your organization's brand guidelines.</li>
+                        <li><strong>Short Videos:</strong> Convert PowerPoint presentations into narrated videos using Clipchamp integration. Includes AI script generation, voiceover, music, and transitions.</li>
+                        <li><strong>Newsletters:</strong> Design and draft internal newsletters with structured layouts, content sections, and visual elements suitable for email or SharePoint distribution.</li>
+                        <li><strong>Document Templates:</strong> Create reusable, professionally formatted templates for project charters, status reports, business cases, and more.</li>
+                    </ul>
+
+                    <h3>Where to Access Create Features</h3>
+                    <ul class="guide-list">
+                        <li><strong>Create Hub:</strong> Visit <code>create.microsoft.com</code> or the Create section in the M365 Copilot app for the full design studio experience.</li>
+                        <li><strong>PowerPoint:</strong> Agent Mode enables iterative design — restructure slides, convert text to visuals, generate images, and apply consistent branding.</li>
+                        <li><strong>Word:</strong> Agent Mode for document drafting, restructuring, and iterative refinement from source materials.</li>
+                        <li><strong>Designer:</strong> Dedicated graphic design app with AI-powered template and image generation.</li>
+                        <li><strong>Outlook:</strong> Content suggestions for email composition, tone adjustment, and subject line inspiration.</li>
+                    </ul>
+
+                    <h3>Brand Kit Integration</h3>
+                    <p>Enterprise Brand Kits ensure all AI-generated content follows your organization's visual identity. Brand Managers configure logos, colors, fonts, and voice guidelines centrally. All Copilot design outputs automatically reference the active Brand Kit. PowerPoint includes a built-in <strong>Brand Checker</strong> that flags non-compliant elements and suggests fixes.</p>
+
+                    <h3>Important Limitations</h3>
+                    <ul class="guide-list">
+                        <li>Image editing works on AI-generated images only — you cannot upload and edit personal photos directly.</li>
+                        <li>Video creation currently requires a PowerPoint file as input and uses stock footage (no new video clip generation).</li>
+                        <li>Free Copilot tier: 15 image boosts/day. Copilot Pro: 100 boosts/day. Enterprise licenses have higher limits.</li>
+                        <li>All externally-published content (social media, client-facing materials) should go through your organization's standard compliance review process.</li>
+                    </ul>
+
+                    <h3>Design & Create Prompts</h3>
+                    <p>Find dedicated Design & Create prompts in the <strong>Prompt Library</strong> tab — filter by the <code>Design & Create</code> theme or search for "CRT" to see all creative prompts. These cover image generation, poster design, infographics, newsletters, video storyboarding, brand compliance checking, and more.</p>
+                </div>
+            </div>
+
+            <!-- Tab 7: Community Submissions -->
             <div class="tab-content" id="community-tab">
                 <div class="community-container">
                     <div class="community-header">
@@ -1915,6 +2007,23 @@ Example:
                 console.log('CSV fetch failed, using embedded data:', e.message);
             }
             document.getElementById('totalPromptCount').textContent = allPrompts.length;
+            populatePersonaFilter();
+        }
+
+        function populatePersonaFilter() {
+            const personaSet = new Set();
+            allPrompts.forEach(p => {
+                if (p.persona) p.persona.split('|').forEach(v => { if (v.trim()) personaSet.add(v.trim()); });
+            });
+            const sorted = Array.from(personaSet).sort();
+            const container = document.getElementById('personaFilters');
+            container.innerHTML = sorted.map(p =>
+                `<div class="checkbox-item"><input type="checkbox" value="${p}" checked><label>${p}</label></div>`
+            ).join('');
+            // Attach listeners
+            container.querySelectorAll('input').forEach(input => {
+                input.addEventListener('change', () => { applyFilters(); updateToggleLabel('personaFilters'); });
+            });
         }
 
         // Setup event listeners
@@ -1935,7 +2044,7 @@ Example:
 
             // Filters
             document.getElementById('searchInput').addEventListener('input', applyFilters);
-            ['envFilters', 'deptFilters', 'surfaceFilters', 'difficultyFilters', 'categoryFilters'].forEach(groupId => {
+            ['envFilters', 'deptFilters', 'personaFilters', 'surfaceFilters', 'difficultyFilters', 'categoryFilters'].forEach(groupId => {
                 document.querySelectorAll(`#${groupId} input`).forEach(input => {
                     input.addEventListener('change', () => {
                         applyFilters();
@@ -2038,6 +2147,7 @@ Example:
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const envs = getCheckedValues('#envFilters');
             const depts = getCheckedValues('#deptFilters');
+            const personas = getCheckedValues('#personaFilters');
             const surfaces = getCheckedValues('#surfaceFilters');
             const difficulties = getCheckedValues('#difficultyFilters');
             const categories = getCheckedValues('#categoryFilters');
@@ -2051,8 +2161,9 @@ Example:
                 const matchSurface = surfaces.length === 0 || surfaces.includes(prompt.copilot_surface);
                 const matchDifficulty = difficulties.length === 0 || difficulties.includes(prompt.difficulty);
                 const matchCategory = categories.length === 0 || categories.includes(prompt.category);
+                const matchPersona = personas.length === 0 || (prompt.persona && personas.some(p => prompt.persona.split('|').map(v => v.trim()).includes(p)));
 
-                return matchSearch && matchEnv && matchDept && matchSurface && matchDifficulty && matchCategory;
+                return matchSearch && matchEnv && matchDept && matchSurface && matchDifficulty && matchCategory && matchPersona;
             });
 
             renderPromptLibrary();
@@ -2094,14 +2205,18 @@ Example:
 
                 const difficultyClass = prompt.difficulty.toLowerCase();
                 const hasPlaceholders = /\[.*?\]/.test(prompt.prompt_text);
+                const isHighRisk = prompt.risk_flag === 'High Risk';
+                const personas = prompt.persona ? prompt.persona.split('|').map(p => p.trim()).filter(Boolean) : [];
 
                 card.innerHTML = `
                     <div class="prompt-title">${escapeHtml(prompt.title)}</div>
                     <div class="prompt-badges">
+                        ${isHighRisk ? '<span class="badge badge-risk">Potentially High Risk</span>' : ''}
                         <span class="badge badge-department">${escapeHtml(prompt.department)}</span>
                         <span class="badge badge-surface">${escapeHtml(prompt.copilot_surface)}</span>
                         <span class="badge badge-difficulty ${difficultyClass}">${escapeHtml(prompt.difficulty)}</span>
                         ${envTags.map(tag => `<span class="badge badge-environment">${escapeHtml(tag)}</span>`).join('')}
+                        ${personas.map(p => `<span class="badge badge-persona">${escapeHtml(p)}</span>`).join('')}
                     </div>
                     <div class="prompt-description">${escapeHtml(prompt.description)}</div>
                     <div class="prompt-expandable" data-prompt-id="${prompt.prompt_id}">
