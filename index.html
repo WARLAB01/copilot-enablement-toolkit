@@ -1638,6 +1638,10 @@ Example:
                         <li>Publish the page</li>
                     </ol>
 
+                    <div class="risk-disclaimer" style="margin-top: 16px;">
+                        <strong>Clipboard Note:</strong> If the "Copy Prompt" button doesn't work when embedded in SharePoint, this is because the Embed web part's iframe restricts clipboard access by default. The toolkit includes a fallback copy method, but if it still fails, users can select and copy prompt text manually. For full clipboard support, ask your SharePoint admin to add <code>allow="clipboard-write"</code> to the iframe element, or deploy via the SPFx approach below.
+                    </div>
+
                     <h3>Step 5: Alternative — SharePoint Framework (SPFx) Web Part</h3>
                     <p>For more advanced deployment with custom branding:</p>
                     <ol class="guide-list">
@@ -2271,11 +2275,43 @@ Example:
             });
         }
 
-        // Copy to clipboard
+        // Copy to clipboard (with fallback for iframe/enterprise restrictions)
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Copied to clipboard');
-            });
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Copied to clipboard!');
+                }).catch(() => {
+                    // Clipboard API blocked (iframe, policy, etc.) — use fallback
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                // Clipboard API unavailable — use fallback
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '-9999px';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                const ok = document.execCommand('copy');
+                if (ok) {
+                    showToast('Copied to clipboard!');
+                } else {
+                    showToast('Copy failed — try selecting the text manually', 'error');
+                }
+            } catch (err) {
+                showToast('Copy not supported in this browser context — try selecting the text manually', 'error');
+            }
+            document.body.removeChild(textarea);
         }
 
         // Placeholder fill modal
