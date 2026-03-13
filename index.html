@@ -900,6 +900,20 @@
         .toast-error { background: #e81123; }
         .toast-warning { background: #ffc500; color: #333; }
         @keyframes toastSlideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .copy-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; justify-content: center; align-items: center; }
+        .copy-modal-overlay.visible { display: flex; }
+        .copy-modal { background: white; border-radius: 12px; padding: 24px; max-width: 640px; width: 90%; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+        .copy-modal h3 { margin: 0 0 8px 0; font-size: 16px; color: #1a1a1a; }
+        .copy-modal .copy-hint { font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.5; }
+        .copy-modal .copy-hint kbd { background: #f0f0f0; border: 1px solid #ccc; border-radius: 3px; padding: 1px 6px; font-family: inherit; font-size: 12px; }
+        .copy-modal textarea { width: 100%; min-height: 180px; max-height: 50vh; padding: 12px; border: 2px solid #0078d4; border-radius: 6px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.6; resize: vertical; color: #1a1a1a; box-sizing: border-box; }
+        .copy-modal textarea:focus { outline: none; border-color: #005a9e; box-shadow: 0 0 0 3px rgba(0,120,212,0.15); }
+        .copy-modal .copy-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+        .copy-modal .copy-modal-actions button { padding: 8px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+        .copy-modal .btn-try-copy { background: #0078d4; color: white; border: none; }
+        .copy-modal .btn-try-copy:hover { background: #005a9e; }
+        .copy-modal .btn-close-copy { background: white; color: #333; border: 1px solid #d0d0d0; }
+        .copy-modal .btn-close-copy:hover { background: #f5f5f5; }
         @media (max-width: 768px) { .form-row { flex-direction: column; } }
     </style>
 </head>
@@ -2275,44 +2289,37 @@ Example:
             });
         }
 
-        // Copy to clipboard (with fallback for iframe/enterprise restrictions)
+        // Copy to clipboard — opens a modal with pre-selected text
+        // so the user can Ctrl+C manually (works even when org policies block
+        // navigator.clipboard and document.execCommand('copy'))
         function copyToClipboard(text) {
-            // Try modern Clipboard API first
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast('Copied to clipboard!');
-                }).catch(() => {
-                    // Clipboard API blocked (iframe, policy, etc.) — use fallback
-                    fallbackCopyToClipboard(text);
-                });
-            } else {
-                // Clipboard API unavailable — use fallback
-                fallbackCopyToClipboard(text);
-            }
+            showCopyModal(text);
         }
 
-        function fallbackCopyToClipboard(text) {
-            const textarea = document.createElement('textarea');
+        function showCopyModal(text) {
+            const overlay = document.getElementById('copyModalOverlay');
+            const textarea = document.getElementById('copyModalText');
             textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-9999px';
-            textarea.style.top = '-9999px';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
+            overlay.classList.add('visible');
+            // Focus and select all text so user just needs to press Ctrl+C
             textarea.focus();
             textarea.select();
-            try {
-                const ok = document.execCommand('copy');
-                if (ok) {
-                    showToast('Copied to clipboard!');
-                } else {
-                    showToast('Copy failed — try selecting the text manually', 'error');
-                }
-            } catch (err) {
-                showToast('Copy not supported in this browser context — try selecting the text manually', 'error');
-            }
-            document.body.removeChild(textarea);
         }
+
+        function hideCopyModal() {
+            document.getElementById('copyModalOverlay').classList.remove('visible');
+        }
+
+        // Close copy modal on button click, overlay click, or Escape
+        document.getElementById('closeCopyModal').addEventListener('click', hideCopyModal);
+        document.getElementById('copyModalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) hideCopyModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('copyModalOverlay').classList.contains('visible')) {
+                hideCopyModal();
+            }
+        });
 
         // Placeholder fill modal
         function showFillModal(prompt) {
@@ -2343,8 +2350,8 @@ Example:
                     filled = filled.replace(`[${ph}]`, value);
                 });
 
-                copyToClipboard(filled);
                 hidePlaceholderModal();
+                copyToClipboard(filled);
             };
 
             document.getElementById('placeholderModal').classList.add('visible');
@@ -2481,8 +2488,8 @@ Example:
                     const input = document.querySelector(`textarea[data-placeholder="${ph}"]`);
                     filled = filled.replace(`[${ph}]`, input.value);
                 });
-                copyToClipboard(filled);
                 hidePlaceholderModal();
+                copyToClipboard(filled);
             };
 
             document.getElementById('placeholderModal').classList.add('visible');
@@ -2551,5 +2558,17 @@ Example:
 
         window.addEventListener('hashchange', updateHash);
     </script>
+
+    <!-- Copy Modal (for environments where clipboard access is blocked) -->
+    <div class="copy-modal-overlay" id="copyModalOverlay">
+        <div class="copy-modal">
+            <h3>Copy Prompt</h3>
+            <div class="copy-hint">The text below is already selected. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> (or <kbd>Cmd</kbd>+<kbd>C</kbd> on Mac) to copy it.</div>
+            <textarea id="copyModalText" readonly></textarea>
+            <div class="copy-modal-actions">
+                <button class="btn-close-copy" id="closeCopyModal">Close</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
