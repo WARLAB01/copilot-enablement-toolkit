@@ -856,7 +856,7 @@
         <button class="tab-btn" data-tab="assembler">Prompt Assembler</button>
         <button class="tab-btn" data-tab="studio">Copilot Studio</button>
         <button class="tab-btn" data-tab="sharepoint">SharePoint Deployment</button>
-        <button class="tab-btn" data-tab="community">Community Submissions</button>
+        <button class="tab-btn" data-tab="community">Suggest a Prompt</button>
     </div>
 
     <!-- Main Container -->
@@ -1597,97 +1597,81 @@ Example:
             <div class="tab-content" id="community-tab">
                 <div class="community-container">
                     <div class="community-header">
-                        <h2>Share Your Prompt Ideas</h2>
-                        <p>Help us grow the library! Submit a prompt you've created or found useful with Microsoft 365 Copilot.</p>
+                        <h2>Suggest a Prompt</h2>
+                        <p>Tell us what you need Copilot to help with. Describe the task or challenge — we'll build the prompt for the library.</p>
                         <div class="submission-count">
-                            <span id="submissionCount">0</span> submissions pending review
+                            <span id="submissionCount">0</span> suggestions submitted
                         </div>
                     </div>
 
                     <div class="community-section">
-                        <h3>Submit a New Prompt</h3>
+                        <h3>What prompt do you wish existed?</h3>
                         <form id="communityForm" class="community-form">
                             <div class="form-group">
-                                <label for="submitTitle">Prompt Title *</label>
-                                <input type="text" id="submitTitle" placeholder="e.g., Executive Summary Generator" required>
-                                <small>Clear, descriptive title (3-6 words)</small>
+                                <label for="submitTitle">Suggestion Title *</label>
+                                <input type="text" id="submitTitle" placeholder="e.g., Help me prep for skip-level meetings" required>
+                                <small>Short description of what you need (3-8 words)</small>
                             </div>
                             <div class="form-row">
                                 <div class="form-group" style="flex:1;">
-                                    <label for="submitDept">Department *</label>
+                                    <label for="submitDept">Your Department *</label>
                                     <select id="submitDept" required>
                                         <option value="">Select Department</option>
-                                        <option value="Universal">Universal</option>
+                                        <option value="Universal">Universal / Cross-functional</option>
                                         <option value="HR">HR</option>
                                         <option value="Corporate Real Estate">Corporate Real Estate</option>
                                         <option value="Marketing">Marketing</option>
                                         <option value="Procurement">Procurement</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="flex:1;">
-                                    <label for="submitSurface">Copilot Surface *</label>
-                                    <select id="submitSurface" required>
-                                        <option value="">Select Surface</option>
-                                        <option value="Chat">Chat</option>
-                                        <option value="Agent-Excel">Agent-Excel</option>
-                                        <option value="Agent-Research">Agent-Research</option>
-                                        <option value="Notebooks">Notebooks</option>
-                                        <option value="Custom Instructions">Custom Instructions</option>
-                                        <option value="Agent-Analyst">Agent-Analyst</option>
-                                        <option value="Copilot Studio">Copilot Studio</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="flex:1;">
-                                    <label for="submitCategory">Category *</label>
-                                    <select id="submitCategory" required>
-                                        <option value="">Select Category</option>
-                                        <option value="Summarization">Summarization</option>
-                                        <option value="Analysis">Analysis</option>
-                                        <option value="Strategic Planning">Strategic Planning</option>
-                                        <option value="Data Management">Data Management</option>
-                                        <option value="Automation">Automation</option>
-                                        <option value="Research">Research</option>
-                                        <option value="Governance">Governance</option>
-                                        <option value="Operations">Operations</option>
+                                        <option value="Finance">Finance</option>
+                                        <option value="IT">IT</option>
+                                        <option value="Legal">Legal</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
+                                <div class="form-group" style="flex:1;">
+                                    <label for="submitSurface">Preferred Surface</label>
+                                    <select id="submitSurface">
+                                        <option value="Not sure">Not sure</option>
+                                        <option value="Chat">Chat</option>
+                                        <option value="Notebooks">Notebooks</option>
+                                        <option value="Agent-Excel">Agent-Excel</option>
+                                        <option value="Agent-Research">Agent-Research</option>
+                                        <option value="Agent-Analyst">Agent-Analyst</option>
+                                        <option value="Custom Instructions">Custom Instructions</option>
+                                        <option value="Copilot Studio">Copilot Studio</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="submitDescription">Description *</label>
-                                <textarea id="submitDescription" placeholder="Brief description of what this prompt does and when to use it" rows="3" required></textarea>
-                                <small>1-2 sentences explaining the value and use case</small>
+                                <label for="submitDescription">Describe what you need *</label>
+                                <textarea id="submitDescription" placeholder="What task are you trying to accomplish? What challenge are you running into? What would the ideal output look like?" rows="5" required></textarea>
+                                <small>Be specific about the scenario — the more detail, the better the prompt we can build</small>
                             </div>
                             <div class="form-group">
-                                <label for="submitPromptText">Prompt Text *</label>
-                                <textarea id="submitPromptText" placeholder="The actual prompt template. Use [PLACEHOLDER] for variable inputs." rows="6" required></textarea>
-                                <small>Include placeholders in [BRACKETS] for dynamic inputs</small>
+                                <label for="submitContext">Any additional context?</label>
+                                <textarea id="submitContext" placeholder="e.g., I usually do this in Excel with data from SAP. I need the output formatted as a table with specific columns..." rows="3"></textarea>
+                                <small>Optional: tools you use, data sources, output preferences, frequency of this task</small>
                             </div>
                             <div class="form-group">
-                                <label for="submitTips">Tips &amp; Best Practices</label>
-                                <textarea id="submitTips" placeholder="How should users customize this prompt? What works best?" rows="3"></textarea>
-                                <small>Optional: guidance for users</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="submitEmail">Your Email (for follow-up)</label>
+                                <label for="submitEmail">Your Email (optional)</label>
                                 <input type="email" id="submitEmail" placeholder="your.email@company.com">
-                                <small>Optional: we'll credit you if we add your prompt to the library</small>
+                                <small>We'll let you know when your suggestion becomes a prompt in the library</small>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Submit Prompt</button>
+                                <button type="submit" class="btn btn-primary">Submit Suggestion</button>
                                 <button type="reset" class="btn btn-secondary">Clear Form</button>
                             </div>
                         </form>
                     </div>
 
                     <div class="community-section">
-                        <h3>Your Submissions</h3>
+                        <h3>Your Suggestions</h3>
                         <div id="submissionsList" class="submissions-list">
-                            <p class="placeholder-text">No submissions yet. Submit your first prompt above!</p>
+                            <p class="placeholder-text">No suggestions yet. Tell us what prompts you need!</p>
                         </div>
                         <div class="community-actions">
-                            <button class="btn btn-secondary" id="exportSubmissionsBtn">Export Submissions (JSON)</button>
-                            <button class="btn btn-secondary" id="clearSubmissionsBtn">Clear All Submissions</button>
+                            <button class="btn btn-secondary" id="exportSubmissionsBtn">Export Suggestions (JSON)</button>
+                            <button class="btn btn-secondary" id="clearSubmissionsBtn">Clear All</button>
                         </div>
                     </div>
                 </div>
@@ -1755,7 +1739,7 @@ Example:
             const list = document.getElementById('submissionsList');
             if (!list) return;
             if (communitySubmissions.length === 0) {
-                list.innerHTML = '<p class="placeholder-text">No submissions yet. Submit your first prompt above!</p>';
+                list.innerHTML = '<p class="placeholder-text">No suggestions yet. Tell us what prompts you need!</p>';
                 return;
             }
             list.innerHTML = communitySubmissions.map(sub => `
@@ -1763,13 +1747,13 @@ Example:
                     <div class="submission-title">${escapeHtml(sub.title)}</div>
                     <div class="submission-meta">
                         <span class="submission-badge">${escapeHtml(sub.department)}</span>
-                        <span class="submission-badge">${escapeHtml(sub.surface)}</span>
-                        <span class="submission-badge">${escapeHtml(sub.category)}</span>
+                        ${sub.surface ? `<span class="submission-badge">${escapeHtml(sub.surface)}</span>` : ''}
                         <span>${new Date(sub.submitted_at).toLocaleDateString()}</span>
                     </div>
-                    <div class="submission-preview">${escapeHtml(sub.prompt_text)}</div>
+                    <div class="submission-preview">${escapeHtml(sub.description)}</div>
+                    ${sub.context ? `<div class="submission-preview" style="font-size:12px;color:#777;margin-top:6px;"><strong>Context:</strong> ${escapeHtml(sub.context)}</div>` : ''}
                     <div class="submission-actions">
-                        <button class="btn btn-secondary" onclick="copyCommunityPrompt('${sub.id}')">Copy Prompt</button>
+                        <button class="btn btn-secondary" onclick="copyCommunityPrompt('${sub.id}')">Copy</button>
                         <button class="btn btn-secondary" onclick="deleteCommunitySubmission('${sub.id}')">Delete</button>
                     </div>
                 </div>
@@ -1786,10 +1770,8 @@ Example:
                     title: document.getElementById('submitTitle').value.trim(),
                     department: document.getElementById('submitDept').value,
                     surface: document.getElementById('submitSurface').value,
-                    category: document.getElementById('submitCategory').value,
                     description: document.getElementById('submitDescription').value.trim(),
-                    prompt_text: document.getElementById('submitPromptText').value.trim(),
-                    tips: document.getElementById('submitTips').value.trim(),
+                    context: document.getElementById('submitContext').value.trim(),
                     email: document.getElementById('submitEmail').value.trim(),
                     submitted_at: new Date().toISOString()
                 };
@@ -1797,15 +1779,16 @@ Example:
                 saveCommunitySubmissions();
                 renderCommunitySubmissions();
                 form.reset();
-                showToast('Prompt submitted! Thank you for contributing.', 'success');
+                showToast('Suggestion submitted! We\'ll work on building a prompt for this.', 'success');
             });
         }
 
         function copyCommunityPrompt(id) {
             const sub = communitySubmissions.find(s => s.id === id);
             if (sub) {
-                copyToClipboard(sub.prompt_text);
-                showToast('Prompt copied to clipboard!', 'success');
+                const text = `${sub.title}\nDepartment: ${sub.department}\nSurface: ${sub.surface}\n\n${sub.description}${sub.context ? '\n\nContext: ' + sub.context : ''}`;
+                copyToClipboard(text);
+                showToast('Suggestion copied to clipboard!', 'success');
             }
         }
 
