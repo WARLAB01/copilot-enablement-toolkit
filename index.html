@@ -102,6 +102,32 @@
             letter-spacing: 0.5px;
         }
 
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-header h3 {
+            margin-bottom: 0;
+        }
+
+        .toggle-all {
+            font-size: 11px;
+            color: #0078d4;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-weight: 500;
+        }
+
+        .toggle-all:hover {
+            text-decoration: underline;
+            color: #005a9e;
+        }
+
         .sidebar-search {
             margin-bottom: 24px;
         }
@@ -871,7 +897,10 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>Environment</h3>
+                <div class="section-header">
+                    <h3>Environment</h3>
+                    <button class="toggle-all" data-target="envFilters">Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="envFilters">
                     <div class="checkbox-item">
                         <input type="checkbox" id="env-copilot-chat" value="Copilot Chat Only" checked>
@@ -897,7 +926,10 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>Department</h3>
+                <div class="section-header">
+                    <h3>Department</h3>
+                    <button class="toggle-all" data-target="deptFilters">Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="deptFilters">
                     <div class="checkbox-item">
                         <input type="checkbox" value="Universal" checked>
@@ -923,7 +955,10 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>Copilot Surface</h3>
+                <div class="section-header">
+                    <h3>Copilot Surface</h3>
+                    <button class="toggle-all" data-target="surfaceFilters">Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="surfaceFilters">
                     <div class="checkbox-item">
                         <input type="checkbox" value="Chat" checked>
@@ -957,7 +992,10 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>Difficulty</h3>
+                <div class="section-header">
+                    <h3>Difficulty</h3>
+                    <button class="toggle-all" data-target="difficultyFilters">Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="difficultyFilters">
                     <div class="checkbox-item">
                         <input type="checkbox" value="Beginner" checked>
@@ -975,7 +1013,10 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>Category</h3>
+                <div class="section-header">
+                    <h3>Category</h3>
+                    <button class="toggle-all" data-target="categoryFilters">Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="categoryFilters">
                     <div class="checkbox-item">
                         <input type="checkbox" value="Universal Toolkit" checked>
@@ -998,7 +1039,7 @@
 
             <div class="sidebar-footer">
                 <button id="exportBtn">Export Filtered Results</button>
-                <div class="prompt-count"><span id="promptCount">0</span> / 157 prompts</div>
+                <div class="prompt-count"><span id="promptCount">0</span> / <span id="totalPromptCount">0</span> prompts</div>
             </div>
         </div>
 
@@ -1873,6 +1914,7 @@ Example:
                 // fetch failed (e.g. file:// protocol) — keep embedded data
                 console.log('CSV fetch failed, using embedded data:', e.message);
             }
+            document.getElementById('totalPromptCount').textContent = allPrompts.length;
         }
 
         // Setup event listeners
@@ -1893,20 +1935,25 @@ Example:
 
             // Filters
             document.getElementById('searchInput').addEventListener('input', applyFilters);
-            document.querySelectorAll('#envFilters input').forEach(input => {
-                input.addEventListener('change', applyFilters);
+            ['envFilters', 'deptFilters', 'surfaceFilters', 'difficultyFilters', 'categoryFilters'].forEach(groupId => {
+                document.querySelectorAll(`#${groupId} input`).forEach(input => {
+                    input.addEventListener('change', () => {
+                        applyFilters();
+                        updateToggleLabel(groupId);
+                    });
+                });
             });
-            document.querySelectorAll('#deptFilters input').forEach(input => {
-                input.addEventListener('change', applyFilters);
-            });
-            document.querySelectorAll('#surfaceFilters input').forEach(input => {
-                input.addEventListener('change', applyFilters);
-            });
-            document.querySelectorAll('#difficultyFilters input').forEach(input => {
-                input.addEventListener('change', applyFilters);
-            });
-            document.querySelectorAll('#categoryFilters input').forEach(input => {
-                input.addEventListener('change', applyFilters);
+
+            // Toggle All buttons
+            document.querySelectorAll('.toggle-all').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const targetId = e.target.dataset.target;
+                    const checkboxes = document.querySelectorAll(`#${targetId} input[type="checkbox"]`);
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    checkboxes.forEach(cb => cb.checked = !allChecked);
+                    e.target.textContent = allChecked ? 'Select All' : 'Deselect All';
+                    applyFilters();
+                });
             });
 
             // Export
@@ -2014,6 +2061,14 @@ Example:
         function getCheckedValues(selector) {
             return Array.from(document.querySelectorAll(`${selector} input:checked`))
                 .map(input => input.value);
+        }
+
+        function updateToggleLabel(groupId) {
+            const btn = document.querySelector(`.toggle-all[data-target="${groupId}"]`);
+            if (!btn) return;
+            const checkboxes = document.querySelectorAll(`#${groupId} input[type="checkbox"]`);
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            btn.textContent = allChecked ? 'Deselect All' : 'Select All';
         }
 
         // Render prompt library
