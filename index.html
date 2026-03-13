@@ -1609,95 +1609,92 @@ Example:
             <div class="tab-content" id="sharepoint-tab">
                 <div class="guide-section">
                     <h2>Deploying the Copilot Enablement Toolkit on SharePoint</h2>
-                    <p>This toolkit can be deployed as a resource on SharePoint for organization-wide access to prompts and guides. Follow these steps to deploy.</p>
+                    <p>This toolkit includes a dedicated SharePoint-optimized version (<code>sharepoint.html</code>) that is self-contained with zero external dependencies — designed specifically for the SharePoint Embed web part's iframe restrictions.</p>
 
-                    <h3>Prerequisites</h3>
-                    <ul class="guide-list">
-                        <li>SharePoint Online site collection with write access</li>
-                        <li>The toolkit files: index.html and copilot-prompt-library.csv</li>
-                        <li>Access to create or edit SharePoint pages and document libraries</li>
-                    </ul>
+                    <h3>Step 1: Choose Your Deployment File</h3>
+                    <table class="compare-table" style="margin-bottom: 16px;">
+                        <thead><tr><th>File</th><th>Best For</th><th>Dependencies</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>sharepoint.html</code></td><td>SharePoint Embed web part (recommended)</td><td>None — all prompts are embedded inline</td></tr>
+                            <tr><td><code>index.html</code></td><td>Standalone hosting (GitHub Pages, IIS, etc.)</td><td>None — prompts embedded, but file is larger with full UI</td></tr>
+                        </tbody>
+                    </table>
+                    <p>For SharePoint, use <strong>sharepoint.html</strong>. It includes all 314 prompts inline, has no CDN or fetch dependencies, and is optimized for iframe rendering. Download it from <a href="https://w4rlab.com/copilot-enablement-toolkit/sharepoint.html" target="_blank">w4rlab.com/copilot-enablement-toolkit/sharepoint.html</a>.</p>
 
-                    <h3>Step 1: Prepare Files</h3>
-                    <p>Ensure you have both files in your local folder:</p>
-                    <ul class="guide-list">
-                        <li><code>index.html</code> — the complete toolkit application</li>
-                        <li><code>copilot-prompt-library.csv</code> — the prompt data</li>
-                    </ul>
-
-                    <h3>Step 2: Create a SharePoint Document Library</h3>
+                    <h3>Step 2: Upload to SharePoint</h3>
                     <ol class="guide-list">
                         <li>Navigate to your SharePoint site</li>
-                        <li>Click "+ New" → "Document Library"</li>
-                        <li>Name it "Copilot Toolkit" or similar</li>
-                        <li>Click Create</li>
+                        <li>Go to <strong>Site Contents</strong> → open an existing Document Library (or create one via "+ New" → "Document Library")</li>
+                        <li>Click <strong>Upload</strong> and select <code>sharepoint.html</code></li>
+                        <li>Once uploaded, right-click the file → <strong>Copy link</strong> (choose "Anyone with the link" or your org's sharing scope)</li>
                     </ol>
 
-                    <h3>Step 3: Upload Files</h3>
+                    <h3>Step 3: Whitelist the Domain (if required)</h3>
+                    <p>SharePoint's Embed web part only allows iframes from approved domains. If your org restricts embed sources:</p>
                     <ol class="guide-list">
-                        <li>Open the new document library</li>
-                        <li>Click "Upload" and select both index.html and copilot-prompt-library.csv</li>
-                        <li>Wait for upload to complete</li>
+                        <li>Go to <strong>SharePoint Admin Center</strong> → <strong>Settings</strong> → <strong>HTML Field Security</strong></li>
+                        <li>Add your SharePoint domain (e.g., <code>yourtenant.sharepoint.com</code>) to the allow list</li>
+                        <li>If hosting externally, add <code>w4rlab.com</code> to the allow list</li>
                     </ol>
 
-                    <h3>Step 4: Create a SharePoint Page with Embed Web Part</h3>
+                    <h3>Step 4: Add the Embed Web Part</h3>
                     <ol class="guide-list">
-                        <li>Navigate to the SharePoint site homepage or a communication site</li>
-                        <li>Click "+ New" → "Page"</li>
-                        <li>Add a title: "Copilot Enablement Toolkit"</li>
-                        <li>Click the "+" button to add a web part</li>
-                        <li>Search for and select the "Embed" web part</li>
-                        <li>Right-click the index.html file in your document library and copy the link (ensure it's a direct link to the file)</li>
-                        <li>Paste the link into the Embed web part URL field</li>
-                        <li>Publish the page</li>
+                        <li>Navigate to the SharePoint page where you want the toolkit</li>
+                        <li>Click <strong>Edit</strong> → click the <strong>+</strong> button to add a web part</li>
+                        <li>Search for and select the <strong>Embed</strong> web part</li>
+                        <li>Paste the direct link to your uploaded <code>sharepoint.html</code> file</li>
+                        <li>The toolkit should render inside the iframe with search, filters, and prompt cards</li>
+                        <li>Click <strong>Publish</strong> to save the page</li>
                     </ol>
-
                     <div class="risk-disclaimer" style="margin-top: 16px;">
-                        <strong>Clipboard Note:</strong> If the "Copy Prompt" button doesn't work when embedded in SharePoint, this is because the Embed web part's iframe restricts clipboard access by default. The toolkit includes a fallback copy method, but if it still fails, users can select and copy prompt text manually. For full clipboard support, ask your SharePoint admin to add <code>allow="clipboard-write"</code> to the iframe element, or deploy via the SPFx approach below.
+                        <strong>Tip — Resize to Fit:</strong> The SharePoint version automatically reports its content height to the parent page via <code>postMessage</code>. If you notice a scrollbar inside the embed, try adjusting the web part height in the Embed settings, or use a full-width column layout for best results.
                     </div>
 
                     <h3>Step 5: Alternative — SharePoint Framework (SPFx) Web Part</h3>
-                    <p>For more advanced deployment with custom branding:</p>
+                    <p>For full-featured deployment with native SharePoint integration (no iframe restrictions):</p>
                     <ol class="guide-list">
                         <li>Contact your SharePoint developer or managed service provider</li>
-                        <li>Provide the index.html and CSV data</li>
-                        <li>Request an SPFx web part that wraps the toolkit</li>
+                        <li>Provide the <code>sharepoint.html</code> source and prompt data</li>
+                        <li>Request an SPFx web part that renders the toolkit natively</li>
                         <li>Deploy to your SharePoint app catalog</li>
+                        <li>This approach enables native clipboard access, full-height rendering, and SharePoint theme integration</li>
                     </ol>
 
-                    <h3>Step 6: Update the Prompt Library</h3>
-                    <p>To update prompts, simply replace the copilot-prompt-library.csv file in the document library. The toolkit will load the latest data on next page refresh.</p>
+                    <h3>Updating Prompts</h3>
+                    <p>The <code>sharepoint.html</code> file contains all prompt data inline. To update prompts:</p>
+                    <ol class="guide-list">
+                        <li>Download the latest <code>sharepoint.html</code> from <a href="https://w4rlab.com/copilot-enablement-toolkit/sharepoint.html" target="_blank">w4rlab.com</a> (it is rebuilt whenever the prompt library is updated)</li>
+                        <li>Upload it to your SharePoint Document Library, replacing the existing file</li>
+                        <li>The embedded page will show the updated prompts on next load — no other changes needed</li>
+                    </ol>
 
                     <h3>Security Considerations</h3>
                     <ul class="guide-list">
                         <li><strong>Access Control:</strong> Use SharePoint permissions to limit who can view/edit the toolkit</li>
-                        <li><strong>Data Privacy:</strong> The CSV data is public to all viewers; do not include sensitive examples</li>
-                        <li><strong>File Versions:</strong> Enable versioning on the document library to track changes to prompts</li>
-                        <li><strong>CSP Headers:</strong> Ensure your SharePoint tenant allows embedding HTML; some may require CSP adjustments</li>
-                        <li><strong>Audit:</strong> Monitor access and changes to the toolkit page via SharePoint audit logs</li>
+                        <li><strong>Data Privacy:</strong> All prompt data is visible to anyone who can view the page; do not include sensitive examples</li>
+                        <li><strong>File Versions:</strong> Enable versioning on the Document Library to track changes</li>
+                        <li><strong>Audit:</strong> Monitor access via SharePoint audit logs</li>
                     </ul>
 
                     <h3>Troubleshooting</h3>
-                    <p><strong>The toolkit doesn't load on the SharePoint page:</strong></p>
+                    <p><strong>Only the header or disclaimer shows (no prompts):</strong></p>
                     <ul class="guide-list">
-                        <li>Check that the embed URL is correct and accessible</li>
-                        <li>Verify that JavaScript is enabled in your browser</li>
-                        <li>Check browser console for CORS or CSP errors</li>
-                        <li>Ensure the CSV file is in the same folder as index.html and the path is correct</li>
+                        <li>This usually means you embedded the full <code>index.html</code> instead of <code>sharepoint.html</code> — the full version relies on CDN scripts that SharePoint's iframe blocks</li>
+                        <li>Switch to <code>sharepoint.html</code> which has zero external dependencies</li>
                     </ul>
 
-                    <p><strong>Prompts don't load from the CSV:</strong></p>
+                    <p><strong>Embed web part shows a blank frame or error:</strong></p>
                     <ul class="guide-list">
-                        <li>Verify the CSV file path in the toolkit (look for the fetch call in browser console)</li>
-                        <li>Check that the CSV is properly formatted (no extra quotes, consistent delimiters)</li>
-                        <li>Test CSV loading by opening index.html locally and checking console errors</li>
+                        <li>Check that the file URL is a direct link (not a folder view)</li>
+                        <li>Verify the domain is whitelisted in HTML Field Security settings</li>
+                        <li>Try the URL directly in a new browser tab to confirm it loads</li>
                     </ul>
 
-                    <p><strong>Users report slow load times:</strong></p>
+                    <p><strong>Copy button doesn't write to clipboard:</strong></p>
                     <ul class="guide-list">
-                        <li>Consider pre-caching the CSV by embedding it directly in the HTML</li>
-                        <li>Optimize images and assets if any are included</li>
-                        <li>Use SharePoint CDN for static asset hosting</li>
+                        <li>Enterprise DLP policies may block programmatic clipboard access inside iframes</li>
+                        <li>The SharePoint version uses a modal with pre-selected text — users can press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy manually</li>
+                        <li>If manual copy is also blocked, users can highlight and right-click → Copy from within the modal</li>
                     </ul>
                 </div>
             </div>
